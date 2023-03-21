@@ -1,6 +1,6 @@
 # PyFontConverter
 
-PyFontConverter is a command line tool to convert fonts format.
+PyFontConverter is a command line tool to convert font formats.
 
 ## Installation
 
@@ -15,15 +15,15 @@ pip install -e .
 
 ## Usage
 
-font-converter COMMAND [ARGS]
+`font-converter COMMAND [ARGS]`
 
 ## Arguments
 
 ### INPUT_PATH
 
 All font-converter subcommands process files in the given path. The INPUT_PATH argument can be a single font file
-or a folder containing one or more fonts. In case a directory is passed as INPUT_PATH, all fonts stored in it
-will be processed, with the exclusion of fonts stored in subdirectories.
+or a folder containing one or more fonts. In case a directory is passed as INPUT_PATH, all fonts stored in it will be
+processed.
 
 ## Common options
 

@@ -91,10 +91,13 @@ def ttf2otf(input_path, tolerance, safe, purge_glyphs, subroutinize, recalcTimes
         counter += 1
 
         try:
+            print()
+            generic_info_message(f"Converting file {os.path.basename(file)}: {counter} of {len(files)}")
+
             output_file = makeOutputFileName(file, extension=".otf", outputDir=output_dir, overWrite=overWrite)
 
             if safe:
-                # Create a temporary file...
+                # Create a temporary OTF file with T2CharStringPen...
                 temp_otf_file = makeOutputFileName(output_file, suffix="_tmp", overWrite=True)
                 ttf2otf_converter_temp = TrueTypeToCFF(
                     input_file=file, output_file=temp_otf_file, recalc_timestamp=recalcTimestamp
@@ -103,7 +106,7 @@ def ttf2otf(input_path, tolerance, safe, purge_glyphs, subroutinize, recalcTimes
                     charstrings_source="t2", purge_glyphs=purge_glyphs, subroutinize=False, overwrite=True
                 )
 
-                # And convert it back to a temporary TTF file that will be used for conversion
+                # ... and convert it back to a temporary TTF file that will be used for conversion
                 temp_ttf_file = makeOutputFileName(temp_otf_file, extension=".ttf", overWrite=True)
                 otf_to_ttf.run(input_file=temp_otf_file, output_file=temp_ttf_file, recalc_timestamp=recalcTimestamp)
                 os.remove(temp_otf_file)
@@ -111,19 +114,11 @@ def ttf2otf(input_path, tolerance, safe, purge_glyphs, subroutinize, recalcTimes
             else:
                 input_file = file
 
-            print()
-            generic_info_message(f"Converting file {os.path.basename(file)}: {counter} of {len(files)}")
-
             ttf2otf_converter = TrueTypeToCFF(
                 input_file=input_file, output_file=output_file, recalc_timestamp=recalcTimestamp
             )
-            ttf2otf_converter.run(
-                charstrings_source="qu2cu",
-                tolerance=tolerance,
-                overwrite=overWrite,
-                subroutinize=subroutinize,
-                purge_glyphs=purge_glyphs,
-            )
+            ttf2otf_converter.run(charstrings_source="qu2cu", tolerance=tolerance, overwrite=overWrite,
+                                  subroutinize=subroutinize, purge_glyphs=purge_glyphs)
 
             if safe:
                 os.remove(input_file)
