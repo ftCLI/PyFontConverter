@@ -1,0 +1,3 @@
+[console_scripts]
+font-converter = font_converter.font_converter:cli
+
