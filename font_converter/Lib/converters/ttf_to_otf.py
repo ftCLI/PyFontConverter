@@ -7,7 +7,7 @@ from fontTools.pens.t2CharStringPen import T2CharStringPen
 from fontTools.subset import Subsetter
 
 from font_converter.Lib.Font import Font
-from font_converter.Lib.click_tools import generic_info_message, generic_error_message, generic_warning_message
+from font_converter.Lib.click_tools import generic_error_message, generic_warning_message
 
 
 class TrueTypeToCFF(object):
@@ -24,20 +24,17 @@ class TrueTypeToCFF(object):
 
         if charstrings_source == "qu2cu":
             self.font.decomponentize()
-            # generic_info_message("Getting CFF charstrings with Qu2CuPen")
-
             try:
                 charstrings = self.get_qu2u_charstrings(tolerance=tolerance, all_cubic=True)
             except NotImplementedError:
+                generic_warning_message("all_cubic set to False")
                 try:
-                    generic_warning_message("all_cubic set to False")
                     charstrings = self.get_qu2u_charstrings(tolerance=tolerance, all_cubic=False)
                 except Exception as e:
                     generic_error_message(f"Failed to get charstring with Qu2CuPen ({e})")
                     return
 
         if charstrings_source == "t2":
-            # generic_info_message("Getting CFF charstrings with T2CharStringPen")
             try:
                 charstrings = self.get_t2_charstrings()
             except Exception as e:
@@ -64,7 +61,6 @@ class TrueTypeToCFF(object):
         fb.setupPost(**post_values)
 
         if subroutinize:
-            # generic_info_message("Subroutinizing font")
             # cffsubr doesn't work with woff/woff2 fonts
             flavor = fb.font.flavor
             if flavor is not None:
