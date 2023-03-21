@@ -1,5 +1,3 @@
-import io
-
 import setuptools
 
 from pathlib import Path
