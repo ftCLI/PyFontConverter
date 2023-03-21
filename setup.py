@@ -11,7 +11,7 @@ setuptools.setup(
     long_description=long_description,
     long_description_content_type='text/markdown',
     author="ftCLI",
-    author_email="ftcli@proton.ne",
+    author_email="ftcli@proton.me",
     url="https://github.com/ftCLI/PyFontConverter",
     packages=setuptools.find_packages(),
     include_package_data=True,
