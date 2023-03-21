@@ -4,9 +4,11 @@ PyFontConverter is a command line tool to convert fonts format.
 
 ## Installation
 
+`pip install PyFontConverter`
+
 To install in editable mode:
 ```
-git clone https://github.com/ftCLI/font-converter.git
+git clone https://github.com/ftCLI/PyFontConverter.git
 cd font-converter
 pip install -e .
 ```
