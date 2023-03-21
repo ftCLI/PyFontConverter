@@ -2,10 +2,11 @@ import setuptools
 
 setuptools.setup(
     name="PyFontConverter",
-    version="0.1.0",
+    version="1.0.0",
     description="Command line tools to convert font files.",
     author="ftCLI",
     author_email="ftcli@proton.ne",
+    url="https://github.com/ftCLI/PyFontConverter",
     packages=setuptools.find_packages(),
     include_package_data=True,
     entry_points={"console_scripts": ["font-converter=font_converter.font_converter:cli"]},
