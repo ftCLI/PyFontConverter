@@ -11,11 +11,11 @@ from font_converter.Lib.click_tools import generic_error_message, generic_warnin
 
 
 class TrueTypeToCFF(object):
-    def __init__(self, input_file: str, output_file: str, recalc_timestamp=False):
-        self.font = Font(input_file, recalcTimestamp=recalc_timestamp)
+    def __init__(self, font: Font, output_file: str):
+        self.font = font
         self.output_file = output_file
 
-    def run(self, charstrings_source="qu2cu", tolerance=1, purge_glyphs=True, subroutinize=True, overwrite=True):
+    def run(self, charstrings_source="qu2cu", tolerance=1, purge_glyphs=True, subroutinize=True):
 
         if purge_glyphs:
             self.purge_glyphs(font=self.font)
@@ -67,13 +67,6 @@ class TrueTypeToCFF(object):
                 fb.font.flavor = None
             cffsubr.subroutinize(fb.font)
             fb.font.flavor = flavor
-
-        ext = fb.font.get_real_extension()
-        suffix = ".otf" if ext in ('.woff', '.woff2') else ""
-
-        self.output_file = makeOutputFileName(
-            self.output_file, overWrite=overwrite, extension=ext, suffix=suffix
-        )
 
         fb.save(self.output_file)
 
