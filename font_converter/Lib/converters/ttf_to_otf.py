@@ -50,7 +50,7 @@ class TrueTypeToCFF(object):
                 del fb.font[table]
 
         fb.setupCFF(
-            psName=self.font["name"].getDebugName(6),
+            psName=self.font.name_table.getDebugName(6),
             charStringsDict=charstrings,
             fontInfo=cff_font_info,
             privateDict={},
