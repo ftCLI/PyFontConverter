@@ -124,7 +124,7 @@ def ttf2otf(input_path, tolerance, safe, purge_glyphs, subroutinize, recalcTimes
 
             converted_files_counter += 1
             generic_info_message(f"Done in {round(time.time() - t, 3)} seconds")
-            file_saved_message(ttf2otf_converter.output_file)
+            file_saved_message(output_file)
 
         except Exception as e:
             generic_error_message(e)
