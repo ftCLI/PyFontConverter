@@ -1,7 +1,6 @@
 import cffsubr
 import pathops
 from fontTools.fontBuilder import FontBuilder
-from fontTools.misc.cliTools import makeOutputFileName
 from fontTools.pens.qu2cuPen import Qu2CuPen
 from fontTools.pens.t2CharStringPen import T2CharStringPen
 from fontTools.subset import Subsetter
@@ -18,7 +17,7 @@ class TrueTypeToCFF(object):
     def run(self, charstrings_source="qu2cu", tolerance=1, purge_glyphs=True, subroutinize=True):
 
         if purge_glyphs:
-            self.purge_glyphs(font=self.font)
+            self.purge_glyphs()
 
         charstrings = {}
 
@@ -41,8 +40,8 @@ class TrueTypeToCFF(object):
                 generic_error_message(f"Failed to get charstrings with T2CharStringPen ({e})")
                 return
 
-        cff_font_info = self.get_cff_font_info(self.font)
-        post_values = self.get_post_values(self.font)
+        cff_font_info = self.get_cff_font_info()
+        post_values = self.get_post_values()
 
         fb = FontBuilder(font=self.font)
         fb.isTTF = False
@@ -70,56 +69,52 @@ class TrueTypeToCFF(object):
 
         fb.save(self.output_file)
 
-    @staticmethod
-    def get_cff_font_info(font: Font) -> dict:
+    def get_cff_font_info(self) -> dict:
         """
         Setup CFF topDict
 
         :return: A dictionary of the font info.
         """
 
-        font_revision = str(round(font["head"].fontRevision, 3)).split(".")
+        font_revision = str(round(self.font["head"].fontRevision, 3)).split(".")
         major_version = str(font_revision[0])
         minor_version = str(font_revision[1]).ljust(3, "0")
 
         cff_font_info = dict(
             version=".".join([major_version, str(int(minor_version))]),
-            FullName=font["name"].getBestFullName(),
-            FamilyName=font["name"].getBestFamilyName(),
-            ItalicAngle=font["post"].italicAngle,
-            UnderlinePosition=font["post"].underlinePosition,
-            UnderlineThickness=font["post"].underlineThickness,
+            FullName=self.font["name"].getBestFullName(),
+            FamilyName=self.font["name"].getBestFamilyName(),
+            ItalicAngle=self.font["post"].italicAngle,
+            UnderlinePosition=self.font["post"].underlinePosition,
+            UnderlineThickness=self.font["post"].underlineThickness,
         )
 
         return cff_font_info
 
-    @staticmethod
-    def get_post_values(font: Font) -> dict:
+    def get_post_values(self) -> dict:
         post_info = dict(
-            italicAngle=round(font["post"].italicAngle),
-            underlinePosition=font["post"].underlinePosition,
-            underlineThickness=font["post"].underlineThickness,
-            isFixedPitch=font["post"].isFixedPitch,
-            minMemType42=font["post"].minMemType42,
-            maxMemType42=font["post"].maxMemType42,
-            minMemType1=font["post"].minMemType1,
-            maxMemType1=font["post"].maxMemType1,
+            italicAngle=round(self.font["post"].italicAngle),
+            underlinePosition=self.font["post"].underlinePosition,
+            underlineThickness=self.font["post"].underlineThickness,
+            isFixedPitch=self.font["post"].isFixedPitch,
+            minMemType42=self.font["post"].minMemType42,
+            maxMemType42=self.font["post"].maxMemType42,
+            minMemType1=self.font["post"].minMemType1,
+            maxMemType1=self.font["post"].maxMemType1,
         )
         return post_info
 
-    @staticmethod
-    def purge_glyphs(font: Font):
-
+    def purge_glyphs(self):
         glyph_ids_to_remove = []
         for g in [".null", "NULL", "uni0000", "CR", "nonmarkingreturn", "uni000D"]:
             try:
-                glyph_ids_to_remove.append(font.getGlyphID(g))
+                glyph_ids_to_remove.append(self.font.getGlyphID(g))
             except KeyError:
                 pass
 
         glyph_ids = [
             i
-            for i in font.getReverseGlyphMap().values()
+            for i in self.font.getReverseGlyphMap().values()
             if i not in glyph_ids_to_remove
         ]
         if len(glyph_ids_to_remove) > 0:
@@ -132,7 +127,7 @@ class TrueTypeToCFF(object):
             subsetter.options.layout_features = "*"
             subsetter.options.hinting = False
             subsetter.glyph_ids_requested = glyph_ids
-            Subsetter.subset(subsetter, font)
+            Subsetter.subset(subsetter, self.font)
 
     def get_qu2u_charstrings(self, tolerance: float = 1, all_cubic: bool = True):
 
@@ -168,7 +163,6 @@ class TrueTypeToCFF(object):
         glyph_set = self.font.getGlyphSet()
 
         for k, v in glyph_set.items():
-
             # Draw the glyph with T2CharStringPen and get the charstring
             t2_pen = T2CharStringPen(v.width, glyphSet=glyph_set)
             glyph_set[k].draw(t2_pen)
