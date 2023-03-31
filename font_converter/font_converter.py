@@ -32,10 +32,10 @@ def ttf_2_otf():
 @click.option(
     "-t",
     "--tolerance",
-    type=click.FloatRange(0, 5),
+    type=click.FloatRange(0, 2.5),
     default=1,
     help="""
-    Conversion tolerance (0-5, default 1). Low tolerance adds more points but keeps shapes. High tolerance adds few
+    Conversion tolerance (0-2.5, default 1). Low tolerance adds more points but keeps shapes. High tolerance adds few
     points but may change shape.
     """,
 )
