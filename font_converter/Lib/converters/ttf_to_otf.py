@@ -87,6 +87,7 @@ class TrueTypeToCFF(object):
             ItalicAngle=self.font["post"].italicAngle,
             UnderlinePosition=self.font["post"].underlinePosition,
             UnderlineThickness=self.font["post"].underlineThickness,
+            isFixedPitch=False if self.font["post"].isFixedPitch == 0 else True,
         )
 
         return cff_font_info
