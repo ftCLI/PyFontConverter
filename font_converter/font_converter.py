@@ -96,6 +96,9 @@ def ttf2otf(input_path, tolerance, safe, purge_glyphs, subroutinize, recalcTimes
 
             source_font = Font(file, recalcTimestamp=recalcTimestamp)
 
+            # Set tolerance as a ratio of unitsPerEm
+            tolerance = tolerance / 1000 * source_font['head'].unitsPerEm
+
             ext = ".otf" if source_font.flavor is None else source_font.get_real_extension()
             suffix = "" if source_font.flavor is None else ".otf"
             output_file = makeOutputFileName(file, suffix=suffix, extension=ext, outputDir=output_dir,
