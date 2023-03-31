@@ -16,7 +16,9 @@ from font_converter.Lib.click_tools import (
     generic_error_message,
     no_valid_fonts_message,
     generic_info_message,
-    file_saved_message, select_instance_coordinates, generic_warning_message,
+    file_saved_message,
+    select_instance_coordinates,
+    generic_warning_message,
 )
 from font_converter.Lib.converters import otf_to_ttf
 from font_converter.Lib.converters.ttf_to_otf import TrueTypeToCFF
@@ -97,12 +99,13 @@ def ttf2otf(input_path, tolerance, safe, purge_glyphs, subroutinize, recalcTimes
             source_font = Font(file, recalcTimestamp=recalcTimestamp)
 
             # Set tolerance as a ratio of unitsPerEm
-            tolerance = tolerance / 1000 * source_font['head'].unitsPerEm
+            tolerance = tolerance / 1000 * source_font["head"].unitsPerEm
 
             ext = ".otf" if source_font.flavor is None else source_font.get_real_extension()
             suffix = "" if source_font.flavor is None else ".otf"
-            output_file = makeOutputFileName(file, suffix=suffix, extension=ext, outputDir=output_dir,
-                                             overWrite=overWrite)
+            output_file = makeOutputFileName(
+                file, suffix=suffix, extension=ext, outputDir=output_dir, overWrite=overWrite
+            )
 
             if safe:
                 # Create a temporary OTF file with T2CharStringPen...
@@ -119,8 +122,9 @@ def ttf2otf(input_path, tolerance, safe, purge_glyphs, subroutinize, recalcTimes
                 input_font = source_font
 
             ttf2otf_converter = TrueTypeToCFF(font=input_font, output_file=output_file)
-            ttf2otf_converter.run(charstrings_source="qu2cu", tolerance=tolerance, subroutinize=subroutinize,
-                                  purge_glyphs=purge_glyphs)
+            ttf2otf_converter.run(
+                charstrings_source="qu2cu", tolerance=tolerance, subroutinize=subroutinize, purge_glyphs=purge_glyphs
+            )
 
             if safe:
                 os.remove(input_font.file)
@@ -172,9 +176,7 @@ def otf2ttf(input_path, outputDir=None, recalcTimestamp=False, overWrite=True):
 
         generic_info_message(f"Converting file {counter} of {len(files)}")
         try:
-            output_file = makeOutputFileName(
-                file, outputDir=output_dir, overWrite=overWrite, extension=".ttf"
-            )
+            output_file = makeOutputFileName(file, outputDir=output_dir, overWrite=overWrite, extension=".ttf")
             otf_to_ttf.run(
                 input_file=file,
                 output_file=output_file,
@@ -250,9 +252,7 @@ def wf2ft(
                     continue
             web_font.flavor = None
             extension = web_font.get_real_extension()
-            desktop_font_file = makeOutputFileName(
-                file, extension=extension, outputDir=output_dir, overWrite=overWrite
-            )
+            desktop_font_file = makeOutputFileName(file, extension=extension, outputDir=output_dir, overWrite=overWrite)
             web_font.save(desktop_font_file, reorderTables=False)
             if delete_source_file:
                 os.remove(file)
@@ -278,9 +278,7 @@ def sfnt_to_web():
               """,
 )
 @add_common_options()
-def ft2wf(
-    input_path, flavor=None, outputDir=None, recalcTimestamp=False, overWrite=True
-):
+def ft2wf(input_path, flavor=None, outputDir=None, recalcTimestamp=False, overWrite=True):
     """
     Converts SFNT fonts (TTF or OTF) to web fonts (WOFF and WOFF2).
     """
@@ -308,9 +306,7 @@ def ft2wf(
             for flavor in output_flavors:
                 font.flavor = flavor
                 extension = font.get_real_extension()
-                web_font_file = makeOutputFileName(
-                    file, extension=extension, outputDir=output_dir, overWrite=overWrite
-                )
+                web_font_file = makeOutputFileName(file, extension=extension, outputDir=output_dir, overWrite=overWrite)
                 font.save(web_font_file, reorderTables=False)
                 file_saved_message(web_font_file)
         except Exception as e:
@@ -449,9 +445,7 @@ def var2static(
 
             if select_instance:
                 selected_coordinates = select_instance_coordinates(axes)
-                is_named_instance = selected_coordinates in [
-                    i.coordinates for i in instances
-                ]
+                is_named_instance = selected_coordinates in [i.coordinates for i in instances]
                 if not is_named_instance:
                     # Set update_name_table value to False because we won't find this Axis Value in the STAT table.
                     update_this_font_name_table = False
@@ -465,9 +459,7 @@ def var2static(
                     # All the instance records in a font should have distinct coordinates and distinct
                     # subfamilyNameID and postScriptName ID values. If two or more records share the same coordinates,
                     # the same nameID values or the same postScriptNameID values, then all but the first can be ignored.
-                    selected_instance = [
-                        i for i in instances if i.coordinates == selected_coordinates
-                    ][0]
+                    selected_instance = [i for i in instances if i.coordinates == selected_coordinates][0]
 
                 instances = [selected_instance]
 
@@ -484,26 +476,20 @@ def var2static(
             # Cannot update name table if there is no STAT table.
             if "STAT" not in variable_font:
                 update_this_font_name_table = False
-                generic_warning_message(
-                    "Cannot update name table if there is no STAT table."
-                )
+                generic_warning_message("Cannot update name table if there is no STAT table.")
 
             # Cannot update name table if there are no STAT Axis Values.
             if update_this_font_name_table:
                 if not hasattr(variable_font["STAT"], "AxisValueArray"):
                     update_this_font_name_table = False
-                    generic_warning_message(
-                        "Cannot update name table if there are no STAT Axis Values."
-                    )
+                    generic_warning_message("Cannot update name table if there are no STAT Axis Values.")
 
             for instance in instances:
                 t = time.time()
                 instance_count += 1
 
                 print()
-                generic_info_message(
-                    f"Exporting instance {instance_count} of {len(instances)}"
-                )
+                generic_info_message(f"Exporting instance {instance_count} of {len(instances)}")
                 static_font: Font = instantiateVariableFont(
                     varfont=variable_font,
                     axisLimits=instance.coordinates,
@@ -519,9 +505,7 @@ def var2static(
                         del static_font["STAT"]
                     static_font.reorder_ui_name_ids()
 
-                static_font_file_name = sanitize_filename(
-                    variable_font.get_static_instance_file_name(instance)
-                )
+                static_font_file_name = sanitize_filename(variable_font.get_static_instance_file_name(instance))
                 static_font_ext = static_font.get_real_extension()
                 output_file = makeOutputFileName(
                     static_font_file_name,
@@ -536,9 +520,7 @@ def var2static(
 
             print()
             generic_info_message(f"Total instances : {len(instances)}")
-            generic_info_message(
-                f"Elapsed time    : {round(time.time() - start_time)} seconds"
-            )
+            generic_info_message(f"Elapsed time    : {round(time.time() - start_time)} seconds")
 
         except Exception as e:
             generic_error_message(e)

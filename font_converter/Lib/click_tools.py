@@ -16,9 +16,7 @@ def add_file_or_path_argument(dir_okay=True, file_okay=True):
     _file_or_path_argument = [
         click.argument(
             "input_path",
-            type=click.Path(
-                exists=True, resolve_path=True, dir_okay=dir_okay, file_okay=file_okay
-            ),
+            type=click.Path(exists=True, resolve_path=True, dir_okay=dir_okay, file_okay=file_okay),
         )
     ]
     return add_options(_file_or_path_argument)
@@ -95,9 +93,7 @@ def file_not_exists_message(file):
 
 
 def file_saved_message(file):
-    click.secho(
-        f"[{click.style('DONE', fg='green')}] {file} {click.style('saved', fg='green')}"
-    )
+    click.secho(f"[{click.style('DONE', fg='green')}] {file} {click.style('saved', fg='green')}")
 
 
 def generic_success_message(success_message):

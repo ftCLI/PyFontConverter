@@ -15,7 +15,6 @@ class TrueTypeToCFF(object):
         self.output_file = output_file
 
     def run(self, charstrings_source="qu2cu", tolerance=1, purge_glyphs=True, subroutinize=True):
-
         if purge_glyphs:
             self.purge_glyphs()
 
@@ -113,11 +112,7 @@ class TrueTypeToCFF(object):
             except KeyError:
                 pass
 
-        glyph_ids = [
-            i
-            for i in self.font.getReverseGlyphMap().values()
-            if i not in glyph_ids_to_remove
-        ]
+        glyph_ids = [i for i in self.font.getReverseGlyphMap().values() if i not in glyph_ids_to_remove]
         if len(glyph_ids_to_remove) > 0:
             subsetter = Subsetter()
             subsetter.options.drop_tables = []
@@ -131,7 +126,6 @@ class TrueTypeToCFF(object):
             Subsetter.subset(subsetter, self.font)
 
     def get_qu2u_charstrings(self, tolerance: float = 1, all_cubic: bool = True):
-
         charstrings = {}
         glyph_set = self.font.getGlyphSet()
 

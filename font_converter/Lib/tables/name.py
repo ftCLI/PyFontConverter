@@ -6,7 +6,6 @@ from fontTools.ttLib.tables._n_a_m_e import (
 
 
 class TableName(table__n_a_m_e):
-
     def filter_namerecords(
         self,
         name_ids=None,
@@ -27,27 +26,17 @@ class TableName(table__n_a_m_e):
         """
         filtered_names = self.names
         if name_ids is not None:
-            filtered_names = [
-                name for name in filtered_names if name.nameID in name_ids
-            ]
+            filtered_names = [name for name in filtered_names if name.nameID in name_ids]
         if platform_id is not None:
-            filtered_names = [
-                name for name in filtered_names if name.platformID == platform_id
-            ]
+            filtered_names = [name for name in filtered_names if name.platformID == platform_id]
         if plat_enc_id is not None:
-            filtered_names = [
-                name for name in filtered_names if name.platEncID == plat_enc_id
-            ]
+            filtered_names = [name for name in filtered_names if name.platEncID == plat_enc_id]
         if lang_id is not None:
             filtered_names = [name for name in filtered_names if name.langID == lang_id]
         if lang_string is not None:
             mac_lang_id = _MAC_LANGUAGE_CODES.get(lang_string.lower())
             win_lang_id = _WINDOWS_LANGUAGE_CODES.get(lang_string.lower())
-            filtered_names = [
-                name
-                for name in filtered_names
-                if name.langID in (mac_lang_id, win_lang_id)
-            ]
+            filtered_names = [name for name in filtered_names if name.langID in (mac_lang_id, win_lang_id)]
         return filtered_names
 
     def del_names(self, name_ids, platform_id=None, language_string=None) -> None:
@@ -60,9 +49,7 @@ class TableName(table__n_a_m_e):
         :param language_string: The language of the name records to delete
         """
 
-        names = self.filter_namerecords(
-            name_ids=name_ids, platform_id=platform_id, lang_string=language_string
-        )
+        names = self.filter_namerecords(name_ids=name_ids, platform_id=platform_id, lang_string=language_string)
 
         for name in names:
             self.removeNames(name.nameID, name.platformID, name.platEncID, name.langID)

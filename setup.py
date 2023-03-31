@@ -1,6 +1,7 @@
 import setuptools
 
 from pathlib import Path
+
 this_directory = Path(__file__).parent
 long_description = (this_directory / "README.md").read_text()
 
@@ -9,7 +10,7 @@ setuptools.setup(
     version="1.0.2",
     description="Command line font converter.",
     long_description=long_description,
-    long_description_content_type='text/markdown',
+    long_description_content_type="text/markdown",
     author="ftCLI",
     author_email="ftcli@proton.me",
     url="https://github.com/ftCLI/PyFontConverter",
