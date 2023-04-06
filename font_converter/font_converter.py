@@ -15,7 +15,6 @@ from font_converter.Lib.click_tools import (
     add_file_or_path_argument,
     add_common_options,
     generic_error_message,
-    no_valid_fonts_message,
     generic_info_message,
     file_saved_message,
     select_instance_coordinates,
