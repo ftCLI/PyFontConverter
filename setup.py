@@ -23,6 +23,7 @@ setuptools.setup(
         "cffsubr>=0.2.9.post1",
         "click>=8.1.3",
         "pathvalidate>=2.5.2",
+        "PyQt5==5.15.9"
     ],
     classifiers=[
         "Programming Language :: Python :: 3",
